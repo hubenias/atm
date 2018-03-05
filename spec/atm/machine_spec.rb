@@ -4,12 +4,10 @@ describe ATM::Machine do
   subject { described_class.instance }
 
   describe '#deposit' do
-    context 'deposit with proper banknotes' do
+    context 'with proper banknotes' do
       let(:banknotes) { { '2' => 1, '1' => 2 } }
-      it 'changes available banknotes amount' do
-        subject.deposit(banknotes)
-        expect(subject.banknotes['1']).to eq(2)
-        expect(subject.banknotes['2']).to eq(1)
+      it 'returns deposit amount' do
+        expect(subject.deposit(banknotes)).to eq(4)
       end
 
       it 'adds to existing banknotes' do
@@ -24,6 +22,12 @@ describe ATM::Machine do
         subject.banknotes['5'] = 1
         subject.deposit(banknotes)
         expect(subject.banknotes['5']).to eq(1)
+      end
+    end
+
+    context 'non-existing banknotes' do
+      it 'raises error' do
+        expect { subject.deposit('3' => 1) }.to raise_error(ArgumentError, 'Wrong banknotes: (3).')
       end
     end
   end

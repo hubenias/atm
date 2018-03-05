@@ -13,20 +13,19 @@ module ATM
     end
 
     def deposit(banknotes)
-      # TODO: return error if there's no such banknote
+      wrong_banknotes = banknotes.select {|k, v| !BANKNOTES.include?(k) }
+      raise ArgumentError, "Wrong banknotes: (#{wrong_banknotes.keys.join(',')})." unless wrong_banknotes.empty?
+      amount = banknotes.map { |b, qty| b.to_i * qty }.reduce(:+)
       banknotes.each do |b, qty|
         @banknotes[b] += qty
       end
+      amount
     end
 
     def withdrawal(amount)
       res = Change.get(amount, banknotes)
       res.each { |k, v| banknotes[k] -= v } if res
       res
-    end
-
-    def account
-      @account ||= { amount: 200 } # TODO: assoc. with some real account
     end
   end
 end

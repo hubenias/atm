@@ -7,7 +7,7 @@ ATM
     * `rackup`
     * deposit: 
     ```
-    $ curl localhost:9292/api/deposit -H Content-Type:application/json -d "{\"amount\":{\"10\":2,\"1\":2}}"`    
+    $ curl localhost:9292/api/deposit -H Content-Type:application/json -d "{\"banknotes\":{\"10\":2,\"1\":2}}"    
     "{\"10\":3,\"1\":4}"
     ```
     * withdrawal:

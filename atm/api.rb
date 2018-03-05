@@ -10,13 +10,25 @@ module ATM
       Machine.instance.banknotes.to_json
     end
 
+    params do
+      requires :banknotes, type: Hash
+    end
     post :deposit do
-      Machine.instance.deposit(params[:amount])
-      Machine.instance.banknotes.to_json # TODO: return some nice code here
+      begin
+        amount = Machine.instance.deposit(params[:banknotes])
+        amount.to_json
+      rescue ArgumentError => e
+        error! e, 400
+      end
     end
 
+    params do
+      requires :amount, type: Integer
+    end
     post :withdrawal do
-      Machine.instance.withdrawal(params[:amount]).to_json
+      res = Machine.instance.withdrawal(params[:amount])
+      error!('ATM does not have enough cash', 400) unless res
+      res.to_json
     end
   end
 end
